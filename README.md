@@ -41,13 +41,15 @@ L’échographie est l’examen clé pour leur **détection et classification**,
   - L’entraînement des modèles  
   - L’évaluation des performances
 
-## Installation et Utilisation
+## Installation et utilisation
 
-### 1. Cloner le projet
+### 1. Cloner le projet et créer les dossiers nécessaires
 
 ```bash
 git clone 'https://github.com/Maxcym/segmentation_IA'
 cd segmentation_IA
+mkdir data
+mkdir models
 ```
 
 ### 2. Installer les dépendances
@@ -58,8 +60,8 @@ pip install -r requirements.txt
 
 ### 3. Préparer les données 
 
-- Placez vos images d’échographie dans le dossier data/images/.
-- Ajoutez les fichiers d’annotations XML dans le dossier data/annotations/.
+- Placez vos images d’échographie dans le dossier data/images/. (Disponibles sur le google drive dont le lien est au dessus)
+- Ajoutez les fichiers d’annotations XML dans le dossier data/annotations/. (Disponibles sur le google drive dont le lien est au dessus)
 
 ## 4. Lancer le pipeline
 
@@ -70,7 +72,7 @@ cd scripts
 ./pipeline_segmentation.py --encoder resnet50
 ```
 
-## 5. Visualiser les Résultats
+## 5. Visualiser les résultats
 
 Une fois le script exécuté, vous verrez s’afficher dans le terminal :
 
