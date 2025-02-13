@@ -46,7 +46,7 @@ L’échographie est l’examen clé pour leur **détection et classification**,
 ### 1. Cloner le projet
 
 ```bash
-git clone 'https://github.com/Maxcym/segmentation_IA/tree/main'
+git clone 'https://github.com/Maxcym/segmentation_IA'
 cd segmentation_IA
 ```
 
