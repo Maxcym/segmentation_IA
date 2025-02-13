@@ -1,4 +1,4 @@
-# Segmentation des Nodules Thyroïdiens
+# Segmentation des nodules thyroïdiens
 
 ## Contexte
 
