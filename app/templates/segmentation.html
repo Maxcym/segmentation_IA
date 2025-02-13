@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Segmentation Médicale{% endblock %}
+
+{% block content %}
+<style>
+    .image-container {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 30px;
+    }
+    .image-container img {
+        width: 500px;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .image-title {
+        text-align: center;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    .loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #007bff;
+    }
+    .stats-button {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
+<div class="container mt-4">
+    <h2 class="text-center">Charger une image pour la segmentation</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="mt-4" id="segmentation-form">
+        <div class="mb-3">
+            <label class="form-label">Choisir un modèle :</label>
+            <select name="model" class="form-select" required>
+                <option value="unet_resnet50">U-Net ResNet50</option>
+                <option value="unet_vgg16">U-Net VGG16</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Uploader une image :</label>
+            <input type="file" name="image" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">🚀 Lancer la segmentation</button>
+    </form>
+
+    <div class="loading-overlay" id="loading-overlay">⏳ Traitement en cours, veuillez patienter...</div>
+
+    {% if segmented_image %}
+        <div class="image-container">
+            <div>
+                <p class="image-title">🖼️ Image Originale</p>
+                <img src="{{ url_for('static', filename='uploads/' + original_image) }}" class="img-fluid rounded shadow">
+            </div>
+            <div>
+                <p class="image-title">📊 Image Segmentée</p>
+                <img src="{{ url_for('static', filename='segmented/' + segmented_image) }}" class="img-fluid rounded shadow">
+            </div>
+        </div>
+
+        <div class="stats-button">
+            <a href="{{ url_for('statistics', result_id=segmentation_result.id) }}" class="btn btn-info">📈 Voir les statistiques</a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    document.getElementById("segmentation-form").addEventListener("submit", function() {
+        document.getElementById("loading-overlay").style.display = "flex";
+    });
+</script>
+{% endblock %}

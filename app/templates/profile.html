@@ -1,0 +1,59 @@
+<!-- templates/profile.html -->
+{% extends "base.html" %}
+{% block title %}Modifier le profil{% endblock %}
+{% block content %}
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: auto;
+    }
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .card-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .form-control {
+        border-radius: 10px;
+    }
+    .btn-submit {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+    .btn-submit:hover {
+        background-color: #218838;
+    }
+</style>
+<div class="container mt-4 profile-container">
+    <div class="card">
+        <div class="card-header bg-primary text-white text-center">✏️ Modifier votre profil</div>
+        <div class="card-body">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.firstname.label(class="form-label fw-bold") }}
+                    {{ form.firstname(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.lastname.label(class="form-label fw-bold") }}
+                    {{ form.lastname(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.profession.label(class="form-label fw-bold") }}
+                    {{ form.profession(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.email.label(class="form-label fw-bold") }}
+                    {{ form.email(class="form-control") }}
+                </div>
+                <button type="submit" class="btn btn-submit w-100">💾 {{ form.submit.label }}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

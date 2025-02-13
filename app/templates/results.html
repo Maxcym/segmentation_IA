@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Résultats de segmentation{% endblock %}
+
+{% block content %}
+<style>
+    .table img {
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .table img:hover {
+        transform: scale(1.1);
+    }
+
+    /* Style de la fenêtre modale */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        position: relative;
+        max-width: 30%; /* Réduction de la taille de l'image */
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .modal img {
+        width: 100%;
+        height: auto;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        color: white;
+        font-size: 30px;
+        cursor: pointer;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+</style>
+
+<div class="container mt-4">
+    <h2 class="text-center">📊 Historique des segmentations</h2>
+
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Modèle utilisé</th>
+                <th>Image originale</th>
+                <th>Image segmentée</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>{{ result.timestamp.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                <td>{{ result.model_used }}</td>
+                <td>
+                    <img src="{{ url_for('static', filename='uploads/' + result.original_image) }}"
+                         width="100" onclick="openModal('{{ url_for('static', filename='uploads/' + result.original_image) }}')">
+                </td>
+                <td>
+                    <img src="{{ url_for('static', filename='segmented/' + result.segmented_image) }}"
+                         width="100" onclick="openModal('{{ url_for('static', filename='segmented/' + result.segmented_image) }}')">
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="{{ url_for('statistics', result_id=result.id) }}" class="btn btn-info btn-sm">Voir les statistiques</a>
+                        <form method="POST" action="{{ url_for('delete_result', result_id=result.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Fenêtre modale -->
+<div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="modal-content">
+        <img id="modalImage" src="">
+    </div>
+</div>
+
+<!-- Script pour gérer la fenêtre modale -->
+<script>
+    function openModal(imageSrc) {
+        document.getElementById("modalImage").src = imageSrc;
+        document.getElementById("imageModal").style.display = "flex";
+    }
+
+    function closeModal() {
+        document.getElementById("imageModal").style.display = "none";
+    }
+</script>
+
+{% endblock %}

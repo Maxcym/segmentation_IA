@@ -1,0 +1,63 @@
+<!-- templates/dashboard.html -->
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+    }
+    .card-title {
+        font-size: 1.4rem;
+        font-weight: bold;
+    }
+    .btn-custom {
+        width: 100%;
+        border-radius: 10px;
+    }
+    .welcome-message {
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+</style>
+<div class="container mt-4">
+    <div class="welcome-message">👋 Bienvenue, {{ user.firstname }} !</div>
+    <div class="d-flex flex-column gap-4">
+        <div class="card text-white bg-primary shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">👤 Profil</h5>
+                <a href="{{ url_for('profile') }}" class="btn btn-light btn-custom">✏️ Modifier le profil</a>
+            </div>
+        </div>
+
+        <div class="card text-white bg-success shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">🩺 Segmentation</h5>
+                <p class="card-text">Segmentation d'images médicales avec l'IA</p>
+                <a href="{{ url_for('segmentation') }}" class="btn btn-light btn-custom">🔍 Segmenter</a>
+            </div>
+        </div>
+
+        <div class="card text-white bg-info shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">📊 Résultats</h5>
+                <p class="card-text">Consultez les dernières analyses.</p>
+                <a href="{{ url_for('results') }}" class="btn btn-light btn-custom">👁️ Voir les résultats</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

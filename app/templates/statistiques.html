@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}Statistiques de Segmentation{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background: #f8f9fa;
+    }
+    .main-container {
+        max-width: 1100px;
+        margin: auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    header {
+        margin-bottom: 30px;
+    }
+    .images-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+        margin-bottom: 20px;
+    }
+    .image-section {
+        text-align: center;
+        flex: 1;
+    }
+    .image-section img {
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    .stats-section, .cr-section {
+        margin-top: 20px;
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border-bottom: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+    th {
+        background: #f4f4f4;
+        font-weight: bold;
+    }
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #fff;
+        background: #007bff;
+        transition: 0.3s;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .btn:hover {
+        background: #0056b3;
+    }
+</style>
+
+<div class="main-container">
+    <header class="text-center">
+        <h1>📊 Résultats de la segmentation</h1>
+    </header>
+
+    <div class="images-container">
+        <div class="image-section">
+            <h3>Image Originale</h3>
+            <img src="{{ url_for('static', filename='uploads/' + original_image) }}" alt="Image Originale">
+        </div>
+        <div class="image-section">
+            <h3>Image Segmentée</h3>
+            <img src="{{ url_for('static', filename='segmented/' + segmented_image) }}" alt="Image Segmentée">
+        </div>
+    </div>
+    <div class="stats-section">
+        <h3>📌 Détails de la segmentation</h3>
+        <table>
+            <tr>
+                <th>Modèle utilisé</th>
+                <td>{{ model_used }}</td>
+            </tr>
+            <tr>
+                <th>Date et heure</th>
+                <td>{{ timestamp }}</td>
+            </tr>
+            <tr>
+                <th>Nombre de pixels segmentés</th>
+                <td>{{ segmented_pixel_count }}</td>
+            </tr>
+
+            <tr>
+                <th>Surface réelle estimée</th>
+                <td>{{ segmented_surface_mm2|round(2)}} mm²</td>
+            </tr>
+
+        </table>
+    </div>
+    <div class="cr-section">
+        <h3>📝 Compte rendu des mesures statistiques</h3>
+        <p>{{ cr_mesures_statistiques }}</p>
+    </div>
+    <div class="btn-container">
+        <a href="{{ url_for('dashboard') }}" class="btn">⬅ Retour au dashboard</a>
+    </div>
+</div>
+{% endblock %}
