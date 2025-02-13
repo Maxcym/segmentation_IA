@@ -1,5 +1,6 @@
 import os
 
+# Classe de configuration pour l'application Flask
 class Config:
     SECRET_KEY = os.urandom(24)
     SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'

@@ -9,8 +9,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Mapping des modèles et leurs encoders correspondants
 models_paths = {
-    "unet_resnet50": "C:/Users/maxim/PycharmProjects/segmentation_IA/models/unet_resnet50.pth",
-    "unet_vgg16": "C:/Users/maxim/PycharmProjects/segmentation_IA/models/unet_vgg16.pth",
+    "unet_resnet50": "../models/unet_resnet50.pth",
+    "unet_vgg16": "../models/unet_vgg16.pth",
 }
 
 encoder_mapping = {

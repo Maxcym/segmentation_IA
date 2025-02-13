@@ -16,8 +16,19 @@ import xml.etree.ElementTree as ET
 import matplotlib.pyplot as plt
 
 
-def preprocess_images(xml_dir, image_dir, output_image_dir, output_mask_dir, filtered_output_dir,
-                      target_size=(256, 256), padding_factor=1.5):
+def preprocess_images(xml_dir, image_dir, output_image_dir, output_mask_dir, filtered_output_dir, target_size=(256, 256), padding_factor=1.5):
+    """
+        Traite les annotations XML et extrait les régions annotées en images et masques.
+
+        Args:
+            xml_dir (str): Répertoire contenant les fichiers XML d'annotations.
+            image_dir (str): Répertoire contenant les images d'entrée.
+            output_image_dir (str): Répertoire pour enregistrer les images recadrées.
+            output_mask_dir (str): Répertoire pour enregistrer les masques recadrés.
+            target_size (tuple): Taille cible pour les images et masques recadrés.
+            padding_factor (float): Facteur d'agrandissement des boîtes englobantes.
+    """
+
     # Création des dossiers de sortie
     os.makedirs(output_image_dir, exist_ok=True)
     os.makedirs(output_mask_dir, exist_ok=True)
@@ -105,12 +116,42 @@ def preprocess_images(xml_dir, image_dir, output_image_dir, output_mask_dir, fil
 
     # --- Filtrage des images ---
     def load_image(image_path):
+        """
+            Charge une image en niveaux de gris.
+
+            Args:
+                image_path (str): Chemin du fichier image.
+
+            Returns:
+                numpy.ndarray: Image en niveaux de gris.
+        """
         return cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
     def apply_nl_means_filter(img, h=10, template_window_size=7, search_window_size=21):
+        """
+            Applique un filtre NL-Means pour le débruitage.
+
+            Args:
+                img (numpy.ndarray): Image d'entrée.
+                h (int): Paramètre de filtrage.
+                template_window_size (int): Taille de la fenêtre modèle.
+                search_window_size (int): Taille de la fenêtre de recherche.
+
+            Returns:
+                numpy.ndarray: Image filtrée.
+        """
         return cv2.fastNlMeansDenoising(img, None, h, template_window_size, search_window_size)
 
     def enhance_contrast(img):
+        """
+            Améliore le contraste d'une image avec CLAHE.
+
+            Args:
+                img (numpy.ndarray): Image d'entrée.
+
+            Returns:
+                numpy.ndarray: Image avec un contraste amélioré.
+        """
         clahe = cv2.createCLAHE(clipLimit=1.5, tileGridSize=(8, 8))
         return clahe.apply(img)
 
@@ -135,11 +176,12 @@ def preprocess_images(xml_dir, image_dir, output_image_dir, output_mask_dir, fil
 
 def process_annotations(xml_dir, image_dir, output_dir):
     """
-    Traite les fichiers XML d'annotations et génère des images annotées.
+        Traite les annotations XML et applique les annotations sur les images correspondantes.
 
-    :param xml_dir: Répertoire contenant les fichiers XML d'annotations.
-    :param image_dir: Répertoire contenant les images associées.
-    :param output_dir: Répertoire où seront enregistrées les images annotées.
+        Args:
+            xml_dir (str): Répertoire contenant les fichiers XML d'annotations.
+            image_dir (str): Répertoire contenant les images d'entrée.
+            output_dir (str): Répertoire où enregistrer les images annotées.
     """
     os.makedirs(output_dir, exist_ok=True)
     xml_files = glob.glob(os.path.join(xml_dir, "*.xml"))
@@ -224,6 +266,14 @@ def process_annotations(xml_dir, image_dir, output_dir):
 
 # --- 1. Définition du Dataset ---
 class SegmentationDataset(Dataset):
+    """
+        Dataset personnalisé pour la segmentation d'images.
+
+        Args:
+            images_paths (list): Liste des chemins des images.
+            masks_paths (list): Liste des chemins des masques.
+            transform (callable, optional): Transformation à appliquer aux images et aux masques.
+    """
     def __init__(self, images_paths, masks_paths, transform=None):
         self.images_paths = images_paths
         self.masks_paths = masks_paths
@@ -251,7 +301,17 @@ class SegmentationDataset(Dataset):
 
 # --- 2. Fonctions Utilitaires ---
 def get_dataloaders(batch_size=8, num_workers=4):
-    """ Charge les images, divise les datasets et retourne les DataLoaders. """
+    """
+    Charge les images, divise les datasets en ensembles d'entraînement, validation et test,
+    et retourne les DataLoaders correspondants.
+
+    Args:
+        batch_size (int): Taille des lots.
+        num_workers (int): Nombre de processus pour le chargement des données.
+
+    Returns:
+        tuple: (train_loader, val_loader, test_loader)
+    """
     images_paths = sorted(glob.glob(os.path.join("../data/train_data", "cropped_filtered_images", "*.jpg")))
     masks_paths  = sorted(glob.glob(os.path.join("../data/train_data", "cropped_masks", "*.jpg")))
 
@@ -287,7 +347,12 @@ def get_dataloaders(batch_size=8, num_workers=4):
 
 
 def create_model(encoder_name):
-    """ Crée et retourne le modèle U-Net avec l'encodeur choisi. """
+    """
+    Crée et retourne un modèle U-Net avec un encodeur ResNet-50.
+
+    Returns:
+        torch.nn.Module: Modèle U-Net.
+    """
     model = smp.Unet(
         encoder_name=encoder_name,
         encoder_weights="imagenet",
@@ -346,6 +411,16 @@ def train_model(model, train_loader, val_loader, device, encoder_name, num_epoch
 
 
 def load_model(model_path, device):
+    """
+        Charge un modèle U-Net pré-entraîné pour la segmentation.
+
+        Args:
+            model_path (str): Chemin vers le fichier des poids du modèle.
+            device (torch.device): Périphérique sur lequel charger le modèle (CPU ou GPU).
+
+        Returns:
+            torch.nn.Module: Modèle chargé et mis en mode évaluation.
+    """
     model = smp.Unet(
         encoder_name="resnet50",
         encoder_weights=None,
@@ -361,6 +436,15 @@ def load_model(model_path, device):
 
 # --- 2. Préparer une image pour le test ---
 def preprocess_image(image_path):
+    """
+        Pré-traite une image pour l'inférence du modèle.
+
+        Args:
+            image_path (str): Chemin de l'image à traiter.
+
+        Returns:
+            tuple: Tenseur d'image prêt pour l'inférence, image originale sous forme de tableau NumPy.
+    """
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
@@ -377,6 +461,17 @@ def preprocess_image(image_path):
 
 # --- 3. Effectuer la prédiction ---
 def predict(model, image_tensor, device):
+    """
+        Effectue une prédiction de segmentation sur une image donnée.
+
+        Args:
+            model (torch.nn.Module): Modèle de segmentation.
+            image_tensor (torch.Tensor): Image pré-traitée sous forme de tenseur.
+            device (torch.device): Périphérique d'inférence.
+
+        Returns:
+            numpy.ndarray: Masque prédit sous forme d'un tableau 2D.
+    """
     image_tensor = image_tensor.to(device)
     with torch.no_grad():
         output = model(image_tensor)
@@ -387,6 +482,17 @@ def predict(model, image_tensor, device):
 
 # --- 4. Superposer le masque sur l'image ---
 def overlay_mask(image, mask, alpha=0.5):
+    """
+        Superpose un masque sur une image d'origine.
+
+        Args:
+            image (numpy.ndarray): Image originale.
+            mask (numpy.ndarray): Masque prédit.
+            alpha (float): Facteur de transparence pour la superposition.
+
+        Returns:
+            numpy.ndarray: Image avec le masque superposé.
+    """
     mask = (mask > 0.5).astype(np.uint8)
     mask_colored = np.zeros_like(image)
     mask_colored[:, :, 0] = mask * 255
@@ -396,6 +502,15 @@ def overlay_mask(image, mask, alpha=0.5):
 
 # --- 5. Récupérer le masque de référence ---
 def get_ground_truth_mask(original_image_filename):
+    """
+        Charge le masque de référence (ground truth) correspondant à une image.
+
+        Args:
+            original_image_filename (str): Nom du fichier image original.
+
+        Returns:
+            numpy.ndarray or None: Masque ground truth normalisé ou None s'il n'existe pas.
+    """
     mask_filename = original_image_filename.replace("cropped.jpg", "mask.jpg")
     mask_filepath = os.path.join("../data/train_data/cropped_masks",
                                  mask_filename)
@@ -406,11 +521,25 @@ def get_ground_truth_mask(original_image_filename):
 
 # --- 6. Calcul des métriques ---
 def dice_score(y_true, y_pred):
+    """
+        Calcule le Dice Score entre le masque de vérité terrain et le masque prédit.
+
+        :param y_true: Masque de vérité terrain.
+        :param y_pred: Masque prédit.
+        :return: Dice Score.
+    """
     intersection = np.sum(y_true * y_pred)
     return (2. * intersection) / (np.sum(y_true) + np.sum(y_pred))
 
 
 def iou_score(y_true, y_pred):
+    """
+        Calcule le score d'intersection sur union (IoU) entre le masque de vérité terrain et le masque prédit.
+
+        :param y_true: Masque de vérité terrain.
+        :param y_pred: Masque prédit.
+        :return: IoU Score.
+    """
     intersection = np.sum(y_true * y_pred)
     union = np.sum(y_true) + np.sum(y_pred) - intersection
     return intersection / union if union > 0 else 0
@@ -418,6 +547,14 @@ def iou_score(y_true, y_pred):
 
 # --- 7. Visualisation des résultats ---
 def visualize(original, mask, overlay, ground_truth=None):
+    """
+        Affiche les images et masques pour évaluation visuelle.
+
+        :param original: Image originale.
+        :param mask: Masque prédit.
+        :param overlay: Image avec masque superposé.
+        :param ground_truth: Masque de vérité terrain (optionnel).
+    """
     plt.imshow(original)
     plt.title("Image Originale")
     plt.axis("off")
@@ -442,6 +579,13 @@ def visualize(original, mask, overlay, ground_truth=None):
 
 # --- 8. Analyse des performances en fonction de la taille du nodule ---
 def analyze_performance(image_paths, model, device):
+    """
+        Analyse la performance du modèle en fonction de la taille des nodules segmentés.
+
+        :param image_paths: Liste des chemins des images.
+        :param model: Modèle de segmentation.
+        :param device: Périphérique utilisé pour l'inférence.
+    """
     sizes = []  # Taille des nodules en pixels
     dice_scores = []
     iou_scores = []

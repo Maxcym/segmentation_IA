@@ -37,6 +37,7 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# Redirige l'utilisateur vers la page de connexion
 @app.route('/')
 def index():
     return redirect(url_for('login'))
@@ -56,7 +57,7 @@ admin.add_view(AdminModelView(User, db.session))
 admin.add_view(AdminModelView(SegmentationResult, db.session))
 
 
-# Route d'inscription avec nouveaux champs
+# Route pour l'inscription des utilisateurs
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -81,7 +82,7 @@ def register():
             return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
-# Route de connexion
+# Route pour la connexion des utilisateurs
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -94,13 +95,13 @@ def login():
         flash('Email ou mot de passe incorrect.', 'danger')
     return render_template('login.html', form=form)
 
-# Page protégée (Tableau de bord)
+# Route pour le tableau de bord (accessible uniquement aux utilisateurs connectés)
 @app.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html', user=current_user)
 
-# Route pour choisir un modèle de segmentation
+# Route pour effectuer la segmentation d'image
 @app.route('/segmentation', methods=['GET', 'POST'])
 @login_required
 def segmentation():
@@ -156,7 +157,7 @@ def results():
     results = SegmentationResult.query.filter_by(user_id=current_user.id).order_by(SegmentationResult.timestamp.desc()).all()
     return render_template('results.html', results=results)
 
-
+# Route pour supprimer un résultat de segmentation
 @app.route('/delete_result/<int:result_id>', methods=['POST'])
 @login_required
 def delete_result(result_id):
@@ -200,7 +201,7 @@ def profile():
         return redirect(url_for('dashboard'))
     return render_template('profile.html', form=form)
 
-
+# Route pour afficher les statistiques d'un résultat de segmentation
 @app.route('/statistiques/<int:result_id>')
 @login_required
 def statistics(result_id):
