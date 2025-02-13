@@ -63,7 +63,7 @@ pip install -r requirements.txt
 
 ## 4. Lancer le pipeline
 
-Le script principal (par exemple scripts/main.py) orchestre le prétraitement, l’entraînement du modèle et l’analyse des performances. Pour lancer la pipeline complète, utilisez la commande suivante en précisant l’encodeur souhaité (ici resnet50) :
+Le script principal orchestre le prétraitement, l’entraînement du modèle et l’analyse des performances. Pour lancer la pipeline complète, utilisez les commandes suivantes en précisant l’encodeur souhaité (ici resnet50) :
 
 ```bash
 cd scripts
@@ -80,6 +80,6 @@ Les métriques d’évaluation (Dice Score, IoU, etc.) pour analyser la performa
 
 ##6. Lancer l'application web
 
-Vous pouvez démarrer l’application web en éxécutant le fichier python app.py
+Vous pouvez démarrer l’application web en éxécutant le fichier python app.py se trouvant dans le dossier app
 
 
