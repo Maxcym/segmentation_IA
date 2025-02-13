@@ -34,13 +34,11 @@ L’échographie est l’examen clé pour leur **détection et classification**,
 > Code de l’application web permettant d’exécuter la segmentation  
 
 **scripts/**  
-> Contient des scripts d’automatisation pour :  
-> 🔹 Prétraitement des images  
-> 🔹 Entraînement des modèles  
-> 🔹 Évaluation des performances  
+> Contient un script d’automatisation pour :  
+> Prétraitement des images  
+> Entraînement des modèles  
+> Évaluation des performances du modèle entraîné 
 
-**scripts/pipeline_segmentation.py**  
-> Un script automatique pour exécuter la segmentation de bout en bout  
 
 **requirements.txt**  
 > Liste des bibliothèques Python requises pour exécuter le projet  
@@ -52,5 +50,5 @@ L’échographie est l’examen clé pour leur **détection et classification**,
 ### Cloner le projet
 
 ```bash
-git clone <URL_DU_REPO>
+git clone 'https://github.com/Maxcym/segmentation_IA/tree/main'
 cd segmentation_IA
