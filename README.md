@@ -81,8 +81,8 @@ Vous obtiendrez également différents dossiers contenant les données prétrait
 - ../data/train_data/cropped_filtered_images/ : Images prétraitées (filtrage et amélioration du contraste).
 - ../models/ : Modèles entraînés enregistrés (ex. unet_resnet50.pth).
 
-##6. Lancer l'application web
+## 6. Lancer l'application web
 
-Vous pouvez démarrer l’application web en éxécutant le fichier python app.py se trouvant dans le dossier app
+Vous pouvez maintenant démarrer l’application web en éxécutant le fichier python app.py se trouvant dans le dossier app
 
 
