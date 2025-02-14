@@ -82,11 +82,11 @@ Les métriques d’évaluation (Dice Score, IoU, etc.) pour analyser la performa
 
 Vous obtiendrezégalement différents dossiers contenant les données prétraitées et le modèle entraîné :
 
-**../data/annotated_images/ : Images originales avec annotations superposées.**
-**../data/train_data/cropped_images/ : Images recadrées à partir des annotations.**
-**../data/train_data/cropped_masks/ : Masques de segmentation correspondants.**
-**../data/train_data/cropped_filtered_images/ : Images prétraitées (filtrage et amélioration du contraste).**
-**../models/ : Modèles entraînés enregistrés (ex. unet_resnet50.pth).**
+**- ../data/annotated_images/ : Images originales avec annotations superposées.**
+**- ../data/train_data/cropped_images/ : Images recadrées à partir des annotations.**
+**- ../data/train_data/cropped_masks/ : Masques de segmentation correspondants.**
+**- ../data/train_data/cropped_filtered_images/ : Images prétraitées (filtrage et amélioration du contraste).**
+**- ../models/ : Modèles entraînés enregistrés (ex. unet_resnet50.pth).**
 
 ##6. Lancer l'application web
 
