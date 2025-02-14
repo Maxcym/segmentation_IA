@@ -63,7 +63,7 @@ pip install -r requirements.txt
 - Placez vos images d’échographie dans le dossier data/images/. (Disponibles sur le google drive dont le lien est au dessus)
 - Ajoutez les fichiers d’annotations XML dans le dossier data/annotations/. (Disponibles sur le google drive dont le lien est au dessus)
 
-## 4. Lancer le pipeline
+### 4. Lancer le pipeline
 
 Le script principal orchestre le prétraitement, l’entraînement du modèle et l’analyse des performances. Pour lancer la pipeline complète, utilisez les commandes suivantes en précisant l’encodeur souhaité (ici resnet50) :
 
@@ -79,6 +79,14 @@ Une fois le script exécuté, vous verrez s’afficher dans le terminal :
 Les étapes de prétraitement (annotation, recadrage et filtrage des images).
 Les statistiques d’entraînement (loss d’entraînement et validation).
 Les métriques d’évaluation (Dice Score, IoU, etc.) pour analyser la performance du modèle.
+
+Vous obtiendrezégalement différents dossiers contenant les données prétraitées et le modèle entraîné :
+
+**../data/annotated_images/ : Images originales avec annotations superposées.**
+**../data/train_data/cropped_images/ : Images recadrées à partir des annotations.**
+**../data/train_data/cropped_masks/ : Masques de segmentation correspondants.**
+**../data/train_data/cropped_filtered_images/ : Images prétraitées (filtrage et amélioration du contraste).**
+**../models/ : Modèles entraînés enregistrés (ex. unet_resnet50.pth).**
 
 ##6. Lancer l'application web
 
