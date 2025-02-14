@@ -80,7 +80,7 @@ Les étapes de prétraitement (annotation, recadrage et filtrage des images).
 Les statistiques d’entraînement (loss d’entraînement et validation).
 Les métriques d’évaluation (Dice Score, IoU, etc.) pour analyser la performance du modèle.
 
-Vous obtiendrezégalement différents dossiers contenant les données prétraitées et le modèle entraîné :
+Vous obtiendrez également différents dossiers contenant les données prétraitées et le modèle entraîné :
 
 - ../data/annotated_images/ : Images originales avec annotations superposées.
 - ../data/train_data/cropped_images/ : Images recadrées à partir des annotations.
