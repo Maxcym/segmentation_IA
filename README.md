@@ -10,7 +10,7 @@ L'objectif est d'automatiser la segmentation des nodules pour :
 - Réduire le temps d’analyse des images  
 - Aider à une meilleure classification des nodules  
 
-## Structure du Projet
+## Structure du projet
 
 - **data/**  
   Contient les **images brutes** et les **annotations**  
