@@ -662,7 +662,7 @@ if __name__ == '__main__':
     model = create_model(encoder_name)
 
     # Entraîner le modèle
-    train_model(model, train_loader, val_loader, device,encoder_name, num_epochs=2)
+    train_model(model, train_loader, val_loader, device,encoder_name, num_epochs=30)
 
 
     print("Entraînement terminé ! \n")
