@@ -51,8 +51,8 @@ pip install -r requirements.txt
 
 ### 3. Préparer les données 
 
-- Placez vos images d’échographie dans le dossier data/images/. (Disponibles sur le google drive dont le lien est au dessus)
-- Ajoutez les fichiers d’annotations XML dans le dossier data/annotations/. (Disponibles sur le google drive dont le lien est au dessus)
+- Placez vos images d’échographie dans le dossier data/images (Disponibles sur le google drive dont le lien est au dessus)
+- Ajoutez les fichiers d’annotations XML dans le dossier data/annotations (Disponibles sur le google drive dont le lien est au dessus)
 
 ### 4. Lancer le pipeline
 
