@@ -62,7 +62,7 @@ Le script principal orchestre le prétraitement, l’entraînement du modèle et
 cd scripts
 ./pipeline_segmentation.py --encoder resnet50
 ```
-**Attention** : il se peut que le chemin menant aux fichiers utilisés ne soient pas valides. Si cela est le cas, il faut supprimer les "../" devant le chemin des fichiers pour que le script fonctionne. Veillez donc bien à ce qu'ils soient tous supprimés.
+**Attention** : il se peut que le chemin menant aux fichiers utilisés ne soient pas valides. Si cela est le cas, il faut supprimer les "../" devant le chemin des fichiers pour que le script fonctionne. 
 
 ## 5. Visualiser les résultats
 
